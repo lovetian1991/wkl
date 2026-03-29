@@ -8,8 +8,7 @@
     ".NETCoreApp,Version=v10.0": {
       "LanRemoteControl.Controller/1.0.0": {
         "dependencies": {
-          "LanRemoteControl.Shared": "1.0.0",
-          "TurboJpegWrapper": "1.5.2"
+          "LanRemoteControl.Shared": "1.0.0"
         },
         "runtime": {
           "LanRemoteControl.Controller.dll": {}

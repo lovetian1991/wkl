@@ -63,8 +63,9 @@ public class CommunicationClient : ICommunicationClient
         }
 
         // Session accepted — start background frame receive loop
+        // Use an independent CTS for the receive loop (not linked to the connection timeout token)
         _connected = true;
-        _receiveCts = CancellationTokenSource.CreateLinkedTokenSource(ct);
+        _receiveCts = new CancellationTokenSource();
         _receiveTask = ReceiveLoopAsync(_receiveCts.Token);
     }
 

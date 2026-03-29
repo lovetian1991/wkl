@@ -272,14 +272,14 @@
 - [x] 11. 检查点 - 确保主控端所有测试通过
   - 确保所有测试通过，如有问题请询问用户。
 
-- [ ] 12. 端到端集成与最终验证
-  - [-] 12.1 集成被控端完整管线
+- [x] 12. 端到端集成与最终验证
+  - [x] 12.1 集成被控端完整管线
     - 验证 Agent 启动后完整管线工作：DesktopCapturer → FrameEncoder → CommunicationServer 发送帧
     - 验证 CommunicationServer 接收 InputCommand → InputSimulator 执行
     - 验证自适应帧率控制器和带宽控制器协同工作
     - _需求: 3.1, 4.1, 8.2, 8.7_
 
-  - [ ] 12.2 集成主控端完整管线
+  - [x] 12.2 集成主控端完整管线
     - 验证 Controller 完整管线：CommunicationClient 接收帧 → FrameDecoder → WriteableBitmap 渲染
     - 验证 InputCollector → CommunicationClient 发送 InputCommand
     - 验证设备发现 → 连接 → 会话建立 → 帧显示 → 输入控制完整流程
@@ -291,7 +291,7 @@
     - 使用 mock DXGI 接口测试捕获-编码-传输-解码管线
     - _需求: 6.1, 7.1, 7.2, 7.3, 7.4, 7.5, 8.1, 8.2_
 
-- [ ] 13. 最终检查点 - 确保所有测试通过
+- [x] 13. 最终检查点 - 确保所有测试通过
   - 确保所有测试通过，如有问题请询问用户。
 
 ## 备注

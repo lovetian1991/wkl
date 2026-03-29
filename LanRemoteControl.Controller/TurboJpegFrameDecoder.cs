@@ -1,78 +1,58 @@
-using System.Runtime.InteropServices;
+using System.IO;
+using System.Windows.Media;
+using System.Windows.Media.Imaging;
 using LanRemoteControl.Shared;
-using TurboJpegWrapper;
 
 namespace LanRemoteControl.Controller;
 
-/// <summary>基于 TurboJPEG (libjpeg-turbo) 的帧解码器</summary>
+/// <summary>基于 WPF 内置 JPEG 解码器的帧解码器</summary>
 public sealed class TurboJpegFrameDecoder : IFrameDecoder, IDisposable
 {
-    private const TJPixelFormats PixelFormat = TJPixelFormats.TJPF_BGRA;
     private const int BytesPerPixel = 4; // BGRA
-
-    private readonly TJDecompressor _decompressor;
     private DecodedFrame? _lastFrame;
 
-    public TurboJpegFrameDecoder()
-    {
-        _decompressor = new TJDecompressor();
-    }
-
-    /// <inheritdoc/>
     public DecodedFrame Decode(EncodedFrame encoded)
     {
         try
         {
-            DecompressedImage result;
-            var handle = GCHandle.Alloc(encoded.Data, GCHandleType.Pinned);
-            try
+            using var ms = new MemoryStream(encoded.Data, 0, encoded.Length);
+            var decoder = new JpegBitmapDecoder(ms, BitmapCreateOptions.None, BitmapCacheOption.OnLoad);
+            var source = decoder.Frames[0];
+
+            // Convert to Bgra32 if needed
+            FormatConvertedBitmap converted;
+            if (source.Format != PixelFormats.Bgra32)
             {
-                result = _decompressor.Decompress(
-                    handle.AddrOfPinnedObject(),
-                    (ulong)encoded.Length,
-                    PixelFormat,
-                    TJFlags.NONE);
+                converted = new FormatConvertedBitmap(source, PixelFormats.Bgra32, null, 0);
             }
-            finally
+            else
             {
-                handle.Free();
+                converted = new FormatConvertedBitmap();
+                converted.BeginInit();
+                converted.Source = source;
+                converted.DestinationFormat = PixelFormats.Bgra32;
+                converted.EndInit();
             }
 
-            byte[] pixelData = result.Data;
-            int stride = encoded.Width * BytesPerPixel;
+            int width = converted.PixelWidth;
+            int height = converted.PixelHeight;
+            int stride = width * BytesPerPixel;
+            byte[] pixelData = new byte[stride * height];
+            converted.CopyPixels(pixelData, stride, 0);
 
-            var frame = new DecodedFrame(
-                PixelData: pixelData,
-                Width: encoded.Width,
-                Height: encoded.Height,
-                Stride: stride);
-
+            var frame = new DecodedFrame(pixelData, width, height, stride);
             _lastFrame = frame;
             return frame;
         }
         catch
         {
-            // On decode failure, return the last successfully decoded frame
             if (_lastFrame.HasValue)
-            {
                 return _lastFrame.Value;
-            }
 
-            // No previous frame — return a black frame of the expected size
             int stride = encoded.Width * BytesPerPixel;
-            int size = stride * encoded.Height;
-            byte[] blackPixels = new byte[size]; // default zero = black in BGRA
-
-            return new DecodedFrame(
-                PixelData: blackPixels,
-                Width: encoded.Width,
-                Height: encoded.Height,
-                Stride: stride);
+            return new DecodedFrame(new byte[stride * encoded.Height], encoded.Width, encoded.Height, stride);
         }
     }
 
-    public void Dispose()
-    {
-        _decompressor.Dispose();
-    }
+    public void Dispose() { }
 }

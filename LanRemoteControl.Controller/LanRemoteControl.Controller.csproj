@@ -12,8 +12,4 @@
     <ProjectReference Include="..\LanRemoteControl.Shared\LanRemoteControl.Shared.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <PackageReference Include="TurboJpegWrapper" Version="*" />
-  </ItemGroup>
-
 </Project>

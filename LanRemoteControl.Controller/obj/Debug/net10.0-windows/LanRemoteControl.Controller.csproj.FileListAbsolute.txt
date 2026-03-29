@@ -1,7 +1,6 @@
 F:\kiro\sd\LanRemoteControl.Controller\obj\Debug\net10.0-windows\LanRemoteControl.Controller.csproj.AssemblyReference.cache
 F:\kiro\sd\LanRemoteControl.Controller\obj\Debug\net10.0-windows\MainWindow.g.cs
 F:\kiro\sd\LanRemoteControl.Controller\obj\Debug\net10.0-windows\App.g.cs
-F:\kiro\sd\LanRemoteControl.Controller\obj\Debug\net10.0-windows\LanRemoteControl.Controller_Content.g.cs
 F:\kiro\sd\LanRemoteControl.Controller\obj\Debug\net10.0-windows\LanRemoteControl.Controller_MarkupCompile.cache
 F:\kiro\sd\LanRemoteControl.Controller\bin\Debug\net10.0-windows\x64\turbojpeg.dll
 F:\kiro\sd\LanRemoteControl.Controller\bin\Debug\net10.0-windows\x86\turbojpeg.dll

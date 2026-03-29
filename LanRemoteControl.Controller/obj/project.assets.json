@@ -29,12 +29,12 @@
           "lib/netstandard1.3/TurboJpegWrapper.dll": {}
         },
         "build": {
-          "build/TurboJpegWrapper.targets": {}
+          "build/_._": {}
         }
       },
       "LanRemoteControl.Shared/1.0.0": {
         "type": "project",
-        "framework": ".NETCoreApp,Version=v7.0",
+        "framework": ".NETCoreApp,Version=v10.0",
         "dependencies": {
           "TurboJpegWrapper": "0.0.0"
         },
@@ -100,8 +100,7 @@
   },
   "projectFileDependencyGroups": {
     "net10.0-windows7.0": [
-      "LanRemoteControl.Shared >= 1.0.0",
-      "TurboJpegWrapper >= *"
+      "LanRemoteControl.Shared >= 1.0.0"
     ]
   },
   "packageFolders": {
@@ -157,12 +156,6 @@
     "frameworks": {
       "net10.0-windows7.0": {
         "targetAlias": "net10.0-windows",
-        "dependencies": {
-          "TurboJpegWrapper": {
-            "target": "Package",
-            "version": "[*, )"
-          }
-        },
         "imports": [
           "net461",
           "net462",
