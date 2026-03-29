@@ -21,7 +21,7 @@ public partial class MainWindow : Window
     private const int DefaultPort = 19621;
 
     // Components
-    private readonly CommunicationClient _communicationClient;
+    private CommunicationClient _communicationClient;
     private readonly DiscoveryClient _discoveryClient;
     private readonly TurboJpegFrameDecoder _frameDecoder;
     private readonly InputCollector _inputCollector;
@@ -37,6 +37,7 @@ public partial class MainWindow : Window
 
     // State
     private bool _isConnected;
+    private bool _isControlEnabled; // 远程操控是否开启
     private CancellationTokenSource? _connectionCts;
     private bool _isValidIp;
 
@@ -118,6 +119,23 @@ public partial class MainWindow : Window
     }
 
     // ── Connect / Disconnect ───────────────────────────────────────
+
+    private void ControlToggleButton_Click(object sender, RoutedEventArgs e)
+    {
+        if (!_isConnected) return;
+
+        _isControlEnabled = !_isControlEnabled;
+
+        if (_isControlEnabled)
+        {
+            ControlToggleButton.Content = "关闭操控";
+            // 输入采集器在 RenderFrame 中 bitmap 创建时已 attach，这里只需切换标志
+        }
+        else
+        {
+            ControlToggleButton.Content = "开启操控";
+        }
+    }
 
     private void ConnectButton_Click(object sender, RoutedEventArgs e)
     {
@@ -248,7 +266,7 @@ public partial class MainWindow : Window
 
     private async void OnInputCaptured(InputCommand command)
     {
-        if (!_isConnected) return;
+        if (!_isConnected || !_isControlEnabled) return;
 
         try
         {
@@ -311,14 +329,14 @@ public partial class MainWindow : Window
     private void SetConnectedState(string host)
     {
         _isConnected = true;
+        _isControlEnabled = false;
         ConnectButton.IsEnabled = false;
         DisconnectButton.IsEnabled = true;
+        ControlToggleButton.IsEnabled = true;
+        ControlToggleButton.Content = "开启操控";
         ConnectionStatusText.Text = $"已连接: {host}";
         _frameCount = 0;
         _fpsStopwatch.Restart();
-
-        // Attach input collector — dimensions will be set when first frame arrives
-        // (initial attach with 0,0 is a no-op; re-attached in RenderFrame when bitmap is created)
     }
 
     private void SetDisconnectedState()
@@ -328,10 +346,21 @@ public partial class MainWindow : Window
         DesktopImage.Source = null;
         ConnectButton.IsEnabled = _isValidIp;
         DisconnectButton.IsEnabled = false;
+        ControlToggleButton.IsEnabled = false;
+        ControlToggleButton.Content = "开启操控";
+        _isControlEnabled = false;
         FpsText.Text = "FPS: --";
         LatencyText.Text = "延迟: --";
         _fpsStopwatch.Stop();
         _frameCount = 0;
+
+        // 重建 CommunicationClient 以支持重连
+        _communicationClient.OnFrameReceived -= OnFrameReceived;
+        _communicationClient.OnDisconnected -= OnDisconnected;
+        _communicationClient.Dispose();
+        _communicationClient = new CommunicationClient();
+        _communicationClient.OnFrameReceived += OnFrameReceived;
+        _communicationClient.OnDisconnected += OnDisconnected;
 
         if (string.IsNullOrEmpty(ConnectionStatusText.Text) ||
             ConnectionStatusText.Text == "正在连接...")

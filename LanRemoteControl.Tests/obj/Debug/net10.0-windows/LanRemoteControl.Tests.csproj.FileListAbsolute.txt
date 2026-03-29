@@ -53,7 +53,6 @@ F:\kiro\sd\LanRemoteControl.Tests\bin\Debug\net10.0-windows\Microsoft.TestPlatfo
 F:\kiro\sd\LanRemoteControl.Tests\bin\Debug\net10.0-windows\Microsoft.TestPlatform.Utilities.dll
 F:\kiro\sd\LanRemoteControl.Tests\bin\Debug\net10.0-windows\Microsoft.VisualStudio.TestPlatform.Common.dll
 F:\kiro\sd\LanRemoteControl.Tests\bin\Debug\net10.0-windows\Newtonsoft.Json.dll
-F:\kiro\sd\LanRemoteControl.Tests\bin\Debug\net10.0-windows\System.Diagnostics.EventLog.dll
 F:\kiro\sd\LanRemoteControl.Tests\bin\Debug\net10.0-windows\System.ServiceProcess.ServiceController.dll
 F:\kiro\sd\LanRemoteControl.Tests\bin\Debug\net10.0-windows\TurboJpegWrapper.dll
 F:\kiro\sd\LanRemoteControl.Tests\bin\Debug\net10.0-windows\xunit.assert.dll
@@ -137,8 +136,6 @@ F:\kiro\sd\LanRemoteControl.Tests\bin\Debug\net10.0-windows\zh-Hans\Microsoft.Vi
 F:\kiro\sd\LanRemoteControl.Tests\bin\Debug\net10.0-windows\zh-Hant\Microsoft.TestPlatform.CommunicationUtilities.resources.dll
 F:\kiro\sd\LanRemoteControl.Tests\bin\Debug\net10.0-windows\zh-Hant\Microsoft.TestPlatform.CrossPlatEngine.resources.dll
 F:\kiro\sd\LanRemoteControl.Tests\bin\Debug\net10.0-windows\zh-Hant\Microsoft.VisualStudio.TestPlatform.Common.resources.dll
-F:\kiro\sd\LanRemoteControl.Tests\bin\Debug\net10.0-windows\runtimes\win\lib\net10.0\System.Diagnostics.EventLog.Messages.dll
-F:\kiro\sd\LanRemoteControl.Tests\bin\Debug\net10.0-windows\runtimes\win\lib\net10.0\System.Diagnostics.EventLog.dll
 F:\kiro\sd\LanRemoteControl.Tests\bin\Debug\net10.0-windows\runtimes\win\lib\net10.0\System.ServiceProcess.ServiceController.dll
 F:\kiro\sd\LanRemoteControl.Tests\bin\Debug\net10.0-windows\LanRemoteControl.Agent.dll
 F:\kiro\sd\LanRemoteControl.Tests\bin\Debug\net10.0-windows\LanRemoteControl.Shared.dll

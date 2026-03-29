@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("LanRemoteControl.Tests")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+6ac0d06cf4732ab578a6b97f9445b88157449843")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+12c07eaa79bb2692b3a53964e978e2e43e3076fc")]
 [assembly: System.Reflection.AssemblyProductAttribute("LanRemoteControl.Tests")]
 [assembly: System.Reflection.AssemblyTitleAttribute("LanRemoteControl.Tests")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

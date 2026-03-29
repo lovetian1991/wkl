@@ -26,6 +26,9 @@
                     Click="ConnectButton_Click" IsEnabled="False"/>
             <Button x:Name="DisconnectButton" Content="断开" Padding="12,4" Margin="4,0"
                     Click="DisconnectButton_Click" IsEnabled="False"/>
+            <Separator/>
+            <Button x:Name="ControlToggleButton" Content="开启操控" Padding="12,4" Margin="4,0"
+                    Click="ControlToggleButton_Click" IsEnabled="False"/>
         </ToolBar>
 
         <!-- Main Content -->

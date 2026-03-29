@@ -1173,19 +1173,21 @@
         "framework": ".NETCoreApp,Version=v10.0",
         "dependencies": {
           "LanRemoteControl.Shared": "1.0.0",
-          "Microsoft.Extensions.Hosting.WindowsServices": "0.0.0",
-          "TurboJpegWrapper": "0.0.0"
+          "Microsoft.Extensions.Hosting.WindowsServices": "0.0.0"
         },
         "compile": {
           "bin/placeholder/LanRemoteControl.Agent.dll": {}
         },
         "runtime": {
           "bin/placeholder/LanRemoteControl.Agent.dll": {}
-        }
+        },
+        "frameworkReferences": [
+          "Microsoft.WindowsDesktop.App.WindowsForms"
+        ]
       },
       "LanRemoteControl.Shared/1.0.0": {
         "type": "project",
-        "framework": ".NETCoreApp,Version=v7.0",
+        "framework": ".NETCoreApp,Version=v10.0",
         "dependencies": {
           "TurboJpegWrapper": "0.0.0"
         },
