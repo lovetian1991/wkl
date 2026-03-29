@@ -1,0 +1,14 @@
+F:\kiro\sd\LanRemoteControl.Shared\bin\Debug\net7.0-windows\x64\turbojpeg.dll
+F:\kiro\sd\LanRemoteControl.Shared\bin\Debug\net7.0-windows\x86\turbojpeg.dll
+F:\kiro\sd\LanRemoteControl.Shared\bin\Debug\net7.0-windows\LanRemoteControl.Shared.deps.json
+F:\kiro\sd\LanRemoteControl.Shared\bin\Debug\net7.0-windows\LanRemoteControl.Shared.dll
+F:\kiro\sd\LanRemoteControl.Shared\bin\Debug\net7.0-windows\LanRemoteControl.Shared.pdb
+F:\kiro\sd\LanRemoteControl.Shared\obj\Debug\net7.0-windows\LanRemoteControl.Shared.csproj.AssemblyReference.cache
+F:\kiro\sd\LanRemoteControl.Shared\obj\Debug\net7.0-windows\LanRemoteControl.Shared.GeneratedMSBuildEditorConfig.editorconfig
+F:\kiro\sd\LanRemoteControl.Shared\obj\Debug\net7.0-windows\LanRemoteControl.Shared.AssemblyInfoInputs.cache
+F:\kiro\sd\LanRemoteControl.Shared\obj\Debug\net7.0-windows\LanRemoteControl.Shared.AssemblyInfo.cs
+F:\kiro\sd\LanRemoteControl.Shared\obj\Debug\net7.0-windows\LanRemoteControl.Shared.csproj.CoreCompileInputs.cache
+F:\kiro\sd\LanRemoteControl.Shared\obj\Debug\net7.0-windows\LanRemoteControl.Shared.dll
+F:\kiro\sd\LanRemoteControl.Shared\obj\Debug\net7.0-windows\refint\LanRemoteControl.Shared.dll
+F:\kiro\sd\LanRemoteControl.Shared\obj\Debug\net7.0-windows\LanRemoteControl.Shared.pdb
+F:\kiro\sd\LanRemoteControl.Shared\obj\Debug\net7.0-windows\ref\LanRemoteControl.Shared.dll

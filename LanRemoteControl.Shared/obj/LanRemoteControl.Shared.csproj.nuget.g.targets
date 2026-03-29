@@ -1,0 +1,6 @@
+﻿<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<Project ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ImportGroup Condition=" '$(ExcludeRestorePackageImports)' != 'true' ">
+    <Import Project="$(NuGetPackageRoot)turbojpegwrapper\1.5.2\build\TurboJpegWrapper.targets" Condition="Exists('$(NuGetPackageRoot)turbojpegwrapper\1.5.2\build\TurboJpegWrapper.targets')" />
+  </ImportGroup>
+</Project>
