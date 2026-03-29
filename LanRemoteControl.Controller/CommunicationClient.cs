@@ -6,17 +6,22 @@ namespace LanRemoteControl.Controller;
 
 /// <summary>
 /// 基于原生 TCP Socket 的通信客户端实现。
-/// 负责与被控端建立会话、接收帧数据和发送输入指令。
+/// 包含心跳保活、TCP KeepAlive、断线检测。
 /// </summary>
 public class CommunicationClient : ICommunicationClient
 {
+    private const int HeartbeatIntervalMs = 5000;  // 每5秒发一次心跳
+    private const int HeartbeatTimeoutMs = 15000;  // 15秒没收到任何数据判定断连
+
     private TcpClient? _tcpClient;
     private NetworkStream? _stream;
     private CancellationTokenSource? _receiveCts;
     private Task? _receiveTask;
+    private Task? _heartbeatTask;
     private readonly SemaphoreSlim _sendLock = new(1, 1);
     private volatile bool _connected;
     private bool _disposed;
+    private long _lastReceivedTicks;
 
     public event Action<EncodedFrame>? OnFrameReceived;
     public event Action? OnDisconnected;
@@ -28,99 +33,68 @@ public class CommunicationClient : ICommunicationClient
         ObjectDisposedException.ThrowIf(_disposed, this);
 
         _tcpClient = new TcpClient();
-        _tcpClient.NoDelay = true; // 禁用 Nagle 算法，减少输入指令延迟
+        _tcpClient.NoDelay = true;
+        // TCP KeepAlive
+        _tcpClient.Client.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.KeepAlive, true);
+        _tcpClient.Client.SetSocketOption(SocketOptionLevel.Tcp, SocketOptionName.TcpKeepAliveTime, 10);
+        _tcpClient.Client.SetSocketOption(SocketOptionLevel.Tcp, SocketOptionName.TcpKeepAliveInterval, 5);
+        _tcpClient.Client.SetSocketOption(SocketOptionLevel.Tcp, SocketOptionName.TcpKeepAliveRetryCount, 3);
+
         await _tcpClient.ConnectAsync(host, port, ct).ConfigureAwait(false);
         _stream = _tcpClient.GetStream();
 
-        // Send SessionRequest
-        var request = new SessionRequestPayload(
-            ControllerName: Environment.MachineName,
-            ProtocolVersion: 1
-        );
+        var request = new SessionRequestPayload(Environment.MachineName, 1);
         var requestBytes = ProtocolSerializer.SerializeSessionRequest(request);
         await ProtocolSerializer.WriteMessageAsync(_stream, MessageType.SessionRequest, requestBytes, ct).ConfigureAwait(false);
         await _stream.FlushAsync(ct).ConfigureAwait(false);
 
-        // Receive SessionResponse
         var (msgType, payload) = await ProtocolSerializer.ReadMessageAsync(_stream, ct).ConfigureAwait(false);
 
         if (msgType != MessageType.SessionResponse)
         {
-            _tcpClient.Dispose();
-            _tcpClient = null;
-            _stream = null;
+            _tcpClient.Dispose(); _tcpClient = null; _stream = null;
             throw new InvalidOperationException($"Expected SessionResponse but received {msgType}.");
         }
 
         var response = ProtocolSerializer.DeserializeSessionResponse(payload);
-
         if (!response.Accepted)
         {
-            _tcpClient.Dispose();
-            _tcpClient = null;
-            _stream = null;
-            throw new InvalidOperationException(
-                response.RejectReason ?? "Session rejected by agent.");
+            _tcpClient.Dispose(); _tcpClient = null; _stream = null;
+            throw new InvalidOperationException(response.RejectReason ?? "Session rejected by agent.");
         }
 
-        // Session accepted — start background frame receive loop
-        // Use an independent CTS for the receive loop (not linked to the connection timeout token)
         _connected = true;
+        _lastReceivedTicks = DateTime.UtcNow.Ticks;
         _receiveCts = new CancellationTokenSource();
         _receiveTask = ReceiveLoopAsync(_receiveCts.Token);
+        _heartbeatTask = HeartbeatLoopAsync(_receiveCts.Token);
     }
 
     public async Task DisconnectAsync()
     {
-        if (!_connected || _stream is null)
-            return;
+        if (!_connected || _stream is null) return;
 
         try
         {
-            // Send SessionClose
             await _sendLock.WaitAsync().ConfigureAwait(false);
             try
             {
-                await ProtocolSerializer.WriteMessageAsync(
-                    _stream,
-                    MessageType.SessionClose,
-                    ReadOnlyMemory<byte>.Empty
-                ).ConfigureAwait(false);
+                await ProtocolSerializer.WriteMessageAsync(_stream, MessageType.SessionClose, ReadOnlyMemory<byte>.Empty).ConfigureAwait(false);
                 await _stream.FlushAsync().ConfigureAwait(false);
             }
-            finally
-            {
-                _sendLock.Release();
-            }
+            finally { _sendLock.Release(); }
 
-            // Wait briefly for SessionCloseAck (best-effort)
             using var ackCts = new CancellationTokenSource(TimeSpan.FromSeconds(2));
-            try
-            {
-                var (msgType, _) = await ProtocolSerializer.ReadMessageAsync(_stream, ackCts.Token).ConfigureAwait(false);
-                // We got the ack (or some other message) — either way, we're done
-            }
-            catch
-            {
-                // Timeout or error waiting for ack — proceed with cleanup
-            }
+            try { await ProtocolSerializer.ReadMessageAsync(_stream, ackCts.Token).ConfigureAwait(false); } catch { }
         }
-        catch
-        {
-            // Ignore errors during graceful disconnect
-        }
-        finally
-        {
-            CleanupConnection();
-        }
+        catch { }
+        finally { CleanupConnection(); }
     }
 
     public async Task SendInputCommandAsync(InputCommand command)
     {
         ObjectDisposedException.ThrowIf(_disposed, this);
-
-        if (!_connected || _stream is null)
-            throw new InvalidOperationException("Not connected.");
+        if (!_connected || _stream is null) return; // 静默忽略而不是抛异常
 
         var buffer = new byte[ProtocolSerializer.InputCommandSize];
         ProtocolSerializer.WriteInputCommand(buffer, command);
@@ -128,16 +102,59 @@ public class CommunicationClient : ICommunicationClient
         await _sendLock.WaitAsync().ConfigureAwait(false);
         try
         {
-            await ProtocolSerializer.WriteMessageAsync(
-                _stream,
-                MessageType.InputCommand,
-                buffer
-            ).ConfigureAwait(false);
+            await ProtocolSerializer.WriteMessageAsync(_stream, MessageType.InputCommand, buffer).ConfigureAwait(false);
             await _stream.FlushAsync().ConfigureAwait(false);
         }
-        finally
+        catch
         {
-            _sendLock.Release();
+            // 发送失败，连接可能已断
+        }
+        finally { _sendLock.Release(); }
+    }
+
+    /// <summary>定期发送心跳，检测连接是否存活</summary>
+    private async Task HeartbeatLoopAsync(CancellationToken ct)
+    {
+        try
+        {
+            while (_connected && !ct.IsCancellationRequested)
+            {
+                await Task.Delay(HeartbeatIntervalMs, ct).ConfigureAwait(false);
+
+                if (!_connected || _stream is null) break;
+
+                // 检查是否超时没收到任何数据
+                long elapsed = DateTime.UtcNow.Ticks - Interlocked.Read(ref _lastReceivedTicks);
+                if (elapsed > TimeSpan.FromMilliseconds(HeartbeatTimeoutMs).Ticks)
+                {
+                    // 超时，判定连接断开
+                    break;
+                }
+
+                // 发送心跳
+                try
+                {
+                    await _sendLock.WaitAsync(ct).ConfigureAwait(false);
+                    try
+                    {
+                        await ProtocolSerializer.WriteMessageAsync(_stream, MessageType.Heartbeat, ReadOnlyMemory<byte>.Empty, ct).ConfigureAwait(false);
+                        await _stream.FlushAsync(ct).ConfigureAwait(false);
+                    }
+                    finally { _sendLock.Release(); }
+                }
+                catch
+                {
+                    break; // 发送心跳失败，连接已断
+                }
+            }
+        }
+        catch (OperationCanceledException) { }
+
+        // 心跳超时或失败，触发断连
+        if (_connected)
+        {
+            _connected = false;
+            OnDisconnected?.Invoke();
         }
     }
 
@@ -149,42 +166,27 @@ public class CommunicationClient : ICommunicationClient
             {
                 var (msgType, payload) = await ProtocolSerializer.ReadMessageAsync(_stream!, ct).ConfigureAwait(false);
 
+                // 收到任何数据都更新最后接收时间
+                Interlocked.Exchange(ref _lastReceivedTicks, DateTime.UtcNow.Ticks);
+
                 switch (msgType)
                 {
                     case MessageType.FrameData:
                         HandleFrameData(payload);
                         break;
-
                     case MessageType.SessionCloseAck:
-                        // Server acknowledged our close — stop receiving
                         return;
-
                     case MessageType.Heartbeat:
-                        // No action needed
                         break;
-
                     default:
-                        // Unknown message type, ignore
                         break;
                 }
             }
         }
-        catch (OperationCanceledException)
-        {
-            // Graceful shutdown
-        }
-        catch (EndOfStreamException)
-        {
-            // Connection closed by server
-        }
-        catch (IOException)
-        {
-            // Connection lost
-        }
-        catch (ObjectDisposedException)
-        {
-            // Stream disposed during shutdown
-        }
+        catch (OperationCanceledException) { }
+        catch (EndOfStreamException) { }
+        catch (IOException) { }
+        catch (ObjectDisposedException) { }
         finally
         {
             if (_connected)
@@ -197,55 +199,28 @@ public class CommunicationClient : ICommunicationClient
 
     private void HandleFrameData(byte[] payload)
     {
-        if (payload.Length < ProtocolSerializer.FrameHeaderSize)
-            return; // Malformed frame, skip
-
+        if (payload.Length < ProtocolSerializer.FrameHeaderSize) return;
         var header = ProtocolSerializer.ReadFrameHeader(payload);
-
-        if (header.CompressedLength <= 0 ||
-            ProtocolSerializer.FrameHeaderSize + header.CompressedLength > payload.Length)
-            return; // Invalid compressed length, skip
+        if (header.CompressedLength <= 0 || ProtocolSerializer.FrameHeaderSize + header.CompressedLength > payload.Length) return;
 
         var jpegData = new byte[header.CompressedLength];
         Buffer.BlockCopy(payload, ProtocolSerializer.FrameHeaderSize, jpegData, 0, header.CompressedLength);
 
-        var frame = new EncodedFrame(
-            Data: jpegData,
-            Length: header.CompressedLength,
-            Width: header.Width,
-            Height: header.Height,
-            TimestampTicks: header.TimestampTicks,
-            SequenceNumber: header.SequenceNumber
-        );
-
-        OnFrameReceived?.Invoke(frame);
+        OnFrameReceived?.Invoke(new EncodedFrame(jpegData, header.CompressedLength, header.Width, header.Height, header.TimestampTicks, header.SequenceNumber));
     }
 
     private void CleanupConnection()
     {
         _connected = false;
-
-        if (_receiveCts is not null)
-        {
-            _receiveCts.Cancel();
-            _receiveCts.Dispose();
-            _receiveCts = null;
-        }
-
+        if (_receiveCts is not null) { _receiveCts.Cancel(); _receiveCts.Dispose(); _receiveCts = null; }
         _stream = null;
-
-        if (_tcpClient is not null)
-        {
-            _tcpClient.Dispose();
-            _tcpClient = null;
-        }
+        if (_tcpClient is not null) { _tcpClient.Dispose(); _tcpClient = null; }
     }
 
     public void Dispose()
     {
         if (_disposed) return;
         _disposed = true;
-
         CleanupConnection();
         _sendLock.Dispose();
     }

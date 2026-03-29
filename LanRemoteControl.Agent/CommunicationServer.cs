@@ -58,7 +58,6 @@ public class CommunicationServer : ICommunicationServer
 
         try
         {
-            // Build payload: FrameHeader (24 bytes) + JPEG data
             var header = new FrameHeader(
                 frame.SequenceNumber,
                 frame.Width,
@@ -79,9 +78,14 @@ public class CommunicationServer : ICommunicationServer
 
             await session.Stream.FlushAsync().ConfigureAwait(false);
         }
-        catch (Exception) when (!session.IsActive)
+        catch
         {
-            // Session already ended, ignore write errors
+            // 写入失败说明连接已断，主动结束会话
+            if (session.IsActive)
+            {
+                _sessionManager.EndSession(session.SessionId);
+                OnClientDisconnected?.Invoke(session);
+            }
         }
     }
 
@@ -104,7 +108,12 @@ public class CommunicationServer : ICommunicationServer
             }
 
             // Handle each client connection in a background task
-            client.NoDelay = true; // 禁用 Nagle 算法，减少输入指令延迟
+            client.NoDelay = true;
+            // TCP KeepAlive: 检测死连接
+            client.Client.SetSocketOption(SocketOptionLevel.Socket, SocketOptionName.KeepAlive, true);
+            client.Client.SetSocketOption(SocketOptionLevel.Tcp, SocketOptionName.TcpKeepAliveTime, 10);      // 10秒无数据开始探测
+            client.Client.SetSocketOption(SocketOptionLevel.Tcp, SocketOptionName.TcpKeepAliveInterval, 5);   // 每5秒探测一次
+            client.Client.SetSocketOption(SocketOptionLevel.Tcp, SocketOptionName.TcpKeepAliveRetryCount, 3); // 3次失败判定断开
             _ = HandleClientAsync(client, ct);
         }
     }

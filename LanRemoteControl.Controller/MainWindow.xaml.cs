@@ -37,9 +37,13 @@ public partial class MainWindow : Window
 
     // State
     private bool _isConnected;
-    private bool _isControlEnabled; // 远程操控是否开启
+    private bool _isControlEnabled;
     private CancellationTokenSource? _connectionCts;
     private bool _isValidIp;
+    private string? _lastConnectedHost;
+    private int _lastConnectedPort;
+    private bool _autoReconnect = true;
+    private bool _isClosing;
 
     public MainWindow()
     {
@@ -154,6 +158,7 @@ public partial class MainWindow : Window
     {
         if (_isConnected) return;
 
+        _autoReconnect = true; // 主动连接时启用自动重连
         SetConnectingState();
 
         _connectionCts = new CancellationTokenSource(TimeSpan.FromSeconds(10));
@@ -181,18 +186,19 @@ public partial class MainWindow : Window
     {
         if (!_isConnected) return;
 
+        _autoReconnect = false; // 手动断开不自动重连
+        _lastConnectedHost = null;
+
         try
         {
             _inputCollector.Detach();
             await _communicationClient.DisconnectAsync();
         }
-        catch
-        {
-            // Best-effort disconnect
-        }
+        catch { }
         finally
         {
             SetDisconnectedState();
+            ConnectionStatusText.Text = "已断开";
         }
     }
 
@@ -285,15 +291,66 @@ public partial class MainWindow : Window
         Dispatcher.BeginInvoke(() =>
         {
             _inputCollector.Detach();
-            ConnectionStatusText.Text = "连接已断开";
-            SetDisconnectedState();
+
+            if (_isClosing) return; // 正在关闭窗口，不重连
+
+            if (_autoReconnect && _lastConnectedHost != null)
+            {
+                ConnectionStatusText.Text = "连接断开，正在自动重连...";
+                SetDisconnectedState();
+                _ = AutoReconnectAsync(_lastConnectedHost, _lastConnectedPort);
+            }
+            else
+            {
+                ConnectionStatusText.Text = "连接已断开";
+                SetDisconnectedState();
+            }
         });
+    }
+
+    private async Task AutoReconnectAsync(string host, int port)
+    {
+        const int maxRetries = 0; // 无限重试
+        int attempt = 0;
+
+        while (!_isClosing && !_isConnected)
+        {
+            attempt++;
+            int delay = Math.Min(2000 + attempt * 500, 10000); // 2s 起步，最多 10s
+
+            await Task.Delay(delay);
+
+            if (_isClosing || _isConnected) break;
+
+            ConnectionStatusText.Text = $"自动重连中... (第 {attempt} 次)";
+
+            try
+            {
+                _connectionCts = new CancellationTokenSource(TimeSpan.FromSeconds(10));
+                await _communicationClient.ConnectAsync(host, port, _connectionCts.Token);
+                SetConnectedState(host);
+                ConnectionStatusText.Text = $"已重连: {host}";
+                return;
+            }
+            catch
+            {
+                // 重连失败，重建 client 再试
+                _communicationClient.OnFrameReceived -= OnFrameReceived;
+                _communicationClient.OnDisconnected -= OnDisconnected;
+                _communicationClient.Dispose();
+                _communicationClient = new CommunicationClient();
+                _communicationClient.OnFrameReceived += OnFrameReceived;
+                _communicationClient.OnDisconnected += OnDisconnected;
+            }
+        }
     }
 
     // ── Window Close ───────────────────────────────────────────────
 
     private async void Window_Closing(object sender, System.ComponentModel.CancelEventArgs e)
     {
+        _isClosing = true;
+        _autoReconnect = false;
         _inputCollector.Detach();
 
         if (_isConnected)
@@ -330,6 +387,8 @@ public partial class MainWindow : Window
     {
         _isConnected = true;
         _isControlEnabled = false;
+        _lastConnectedHost = host;
+        _lastConnectedPort = DefaultPort;
         ConnectButton.IsEnabled = false;
         DisconnectButton.IsEnabled = true;
         ControlToggleButton.IsEnabled = true;
