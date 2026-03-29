@@ -6,7 +6,7 @@
 
 ## 任务
 
-- [ ] 1. 搭建解决方案结构和共享数据模型
+- [x] 1. 搭建解决方案结构和共享数据模型
   - [x] 1.1 创建解决方案和项目结构
     - 创建 `LanRemoteControl.sln` 解决方案
     - 创建 `LanRemoteControl.Shared` 类库项目（共享数据模型和协议）
@@ -23,7 +23,7 @@
     - 创建 `DiscoveryResponsePayload`、`SessionRequestPayload`、`SessionResponsePayload`、`DiscoveredAgent` 数据结构
     - _需求: 8.1, 8.2, 8.3_
 
-  - [ ] 1.3 实现二进制协议序列化/反序列化
+  - [x] 1.3 实现二进制协议序列化/反序列化
     - 实现消息帧的读写：1 字节 MessageType + 4 字节 PayloadLength (LE) + 变长 Payload
     - 实现 `FrameHeader` 的 25 字节固定布局二进制序列化（使用 `BinaryPrimitives`）
     - 实现 `InputCommand` 的二进制序列化/反序列化
@@ -36,8 +36,8 @@
     - 单元测试：验证 JSON 序列化的会话管理消息往返正确性
     - _需求: 8.1, 8.2_
 
-- [ ] 2. 实现被控端核心组件——桌面捕获与帧编码
-  - [ ] 2.1 实现桌面捕获器（DesktopCapturer）
+- [x] 2. 实现被控端核心组件——桌面捕获与帧编码
+  - [x] 2.1 实现桌面捕获器（DesktopCapturer）
     - 创建 `IDesktopCapturer` 接口和基于 DXGI Desktop Duplication API 的实现类
     - 使用 `IDXGIOutputDuplication` 获取桌面帧，帧数据保持在 GPU 内存中
     - 实现 `CaptureNextFrame(int timeoutMs)` 方法，默认帧间隔 33ms（30fps）
@@ -47,14 +47,14 @@
     - 实现 `IDisposable`，确保 DXGI 资源正确释放
     - _需求: 3.1, 3.2, 3.4, 3.7, 3.8, 3.9_
 
-  - [ ] 2.2 实现帧编码器（FrameEncoder）
+  - [x] 2.2 实现帧编码器（FrameEncoder）
     - 创建 `IFrameEncoder` 接口和基于 TurboJPEG（libjpeg-turbo）的实现类
     - 实现 `Encode(CapturedFrame frame)` 方法，默认 JPEG 质量 70
     - 实现 `Quality` 属性，支持动态调整（范围 30-100）
     - 使用 `ArrayPool<byte>.Shared` 复用编码缓冲区，减少 GC 压力
     - _需求: 8.3, 8.5_
 
-  - [ ] 2.3 实现自适应帧率/分辨率控制器
+  - [x] 2.3 实现自适应帧率/分辨率控制器
     - 创建自适应控制器，监控当前帧率
     - 当帧率低于 20fps 时，输出缩放因子 0.75 触发分辨率降低
     - 当帧率恢复到 20fps 以上时，恢复原始分辨率
@@ -76,8 +76,8 @@
     - 生成随机像素数据帧，编码再解码后验证 PSNR ≥ 30dB 且尺寸一致
     - **验证: 需求 8.5**
 
-- [ ] 3. 实现被控端核心组件——输入模拟
-  - [ ] 3.1 实现输入模拟器（InputSimulator）
+- [x] 3. 实现被控端核心组件——输入模拟
+  - [x] 3.1 实现输入模拟器（InputSimulator）
     - 创建 `IInputSimulator` 接口和基于 Windows SendInput API 的实现类
     - 通过 P/Invoke 调用 `SendInput`，定义 `INPUT`、`MOUSEINPUT`、`KEYBDINPUT` 结构体
     - 实现鼠标操作：移动（`MOUSEEVENTF_ABSOLUTE`）、单击、双击、右键、滚轮
@@ -96,11 +96,11 @@
     - 生成随机 InputCommand 序列，验证执行顺序与接收顺序一致
     - **验证: 需求 4.4**
 
-- [ ] 4. 检查点 - 确保所有测试通过
+- [x] 4. 检查点 - 确保所有测试通过
   - 确保所有测试通过，如有问题请询问用户。
 
-- [ ] 5. 实现被控端网络层——通信服务端与设备发现
-  - [ ] 5.1 实现会话管理器（SessionManager）
+- [x] 5. 实现被控端网络层——通信服务端与设备发现
+  - [x] 5.1 实现会话管理器（SessionManager）
     - 创建 `ISessionManager` 接口和实现类
     - 实现 `ActiveSession` 属性、`TryAcceptSession` 和 `EndSession` 方法
     - 确保同一时间仅允许一个活跃会话，拒绝并发请求
@@ -111,7 +111,7 @@
     - 生成随机数量（N ≥ 2）的并发会话请求，验证仅 1 个被接受，其余被拒绝
     - **验证: 需求 7.5**
 
-  - [ ] 5.3 实现通信服务端（CommunicationServer）
+  - [x] 5.3 实现通信服务端（CommunicationServer）
     - 创建 `ICommunicationServer` 接口和基于原生 TCP Socket 的实现类
     - 实现 TCP 监听、客户端连接/断开事件
     - 实现 `SessionContext` 管理，集成 `SessionManager` 进行会话准入控制
@@ -121,7 +121,7 @@
     - 实现 TCP 连接异常断开时的会话资源清理
     - _需求: 7.1, 7.2, 7.5, 8.1, 8.2, 8.6_
 
-  - [ ] 5.4 实现设备发现响应器（DiscoveryResponder）
+  - [x] 5.4 实现设备发现响应器（DiscoveryResponder）
     - 创建 `IDiscoveryResponder` 接口和实现类
     - 监听 UDP 端口 19620
     - 收到 DiscoveryRequest 后回复包含主机名和 TCP 服务端口的 DiscoveryResponse
@@ -133,7 +133,7 @@
     - **验证: 需求 6.1**
 
 - [ ] 6. 实现被控端自适应带宽控制与敏感词过滤
-  - [ ] 6.1 实现自适应带宽/压缩质量控制器
+  - [-] 6.1 实现自适应带宽/压缩质量控制器
     - 监控网络传输延迟和带宽
     - 当带宽低于阈值时，降低 JPEG 编码质量（最低至 30）
     - 当带宽恢复时，恢复默认质量（70）

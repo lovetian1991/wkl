@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "xx90EzLSWgzHD7vJmAOvmrQolP33pI8L7kcxvwmJkUBBz7gVw+sn9q3ofRENVHSr2zIcyahoc/7TLGQ6n4AJew==",
+  "dgSpecHash": "lE7aCbRhZVY=",
   "success": true,
   "projectFilePath": "F:\\kiro\\sd\\LanRemoteControl.Shared\\LanRemoteControl.Shared.csproj",
   "expectedPackageFiles": [
@@ -77,7 +77,10 @@
     "C:\\Users\\86150\\.nuget\\packages\\system.threading.timer\\4.3.0\\system.threading.timer.4.3.0.nupkg.sha512",
     "C:\\Users\\86150\\.nuget\\packages\\system.xml.readerwriter\\4.3.0\\system.xml.readerwriter.4.3.0.nupkg.sha512",
     "C:\\Users\\86150\\.nuget\\packages\\system.xml.xdocument\\4.3.0\\system.xml.xdocument.4.3.0.nupkg.sha512",
-    "C:\\Users\\86150\\.nuget\\packages\\turbojpegwrapper\\1.5.2\\turbojpegwrapper.1.5.2.nupkg.sha512"
+    "C:\\Users\\86150\\.nuget\\packages\\turbojpegwrapper\\1.5.2\\turbojpegwrapper.1.5.2.nupkg.sha512",
+    "C:\\Users\\86150\\.nuget\\packages\\microsoft.netcore.app.ref\\7.0.20\\microsoft.netcore.app.ref.7.0.20.nupkg.sha512",
+    "C:\\Users\\86150\\.nuget\\packages\\microsoft.windowsdesktop.app.ref\\7.0.20\\microsoft.windowsdesktop.app.ref.7.0.20.nupkg.sha512",
+    "C:\\Users\\86150\\.nuget\\packages\\microsoft.aspnetcore.app.ref\\7.0.20\\microsoft.aspnetcore.app.ref.7.0.20.nupkg.sha512"
   ],
   "logs": []
 }

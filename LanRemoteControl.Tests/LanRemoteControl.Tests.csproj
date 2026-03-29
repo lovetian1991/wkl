@@ -9,6 +9,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\LanRemoteControl.Shared\LanRemoteControl.Shared.csproj" />
+    <ProjectReference Include="..\LanRemoteControl.Agent\LanRemoteControl.Agent.csproj" />
   </ItemGroup>
 
   <ItemGroup>
