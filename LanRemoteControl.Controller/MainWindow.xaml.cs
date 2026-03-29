@@ -109,6 +109,14 @@ public partial class MainWindow : Window
         }
     }
 
+    private void DeviceListBox_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
+    {
+        if (DeviceListBox.SelectedItem is DiscoveredAgent agent)
+        {
+            IpTextBox.Text = agent.IpAddress;
+        }
+    }
+
     // ── Connect / Disconnect ───────────────────────────────────────
 
     private void ConnectButton_Click(object sender, RoutedEventArgs e)

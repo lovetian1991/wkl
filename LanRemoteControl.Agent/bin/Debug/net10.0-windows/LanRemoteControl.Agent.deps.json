@@ -9,8 +9,7 @@
       "LanRemoteControl.Agent/1.0.0": {
         "dependencies": {
           "LanRemoteControl.Shared": "1.0.0",
-          "Microsoft.Extensions.Hosting.WindowsServices": "10.0.5",
-          "TurboJpegWrapper": "1.5.2"
+          "Microsoft.Extensions.Hosting.WindowsServices": "10.0.5"
         },
         "runtime": {
           "LanRemoteControl.Agent.dll": {}
@@ -329,8 +328,7 @@
           "Microsoft.Extensions.DependencyInjection.Abstractions": "10.0.5",
           "Microsoft.Extensions.Logging": "10.0.5",
           "Microsoft.Extensions.Logging.Abstractions": "10.0.5",
-          "Microsoft.Extensions.Options": "10.0.5",
-          "System.Diagnostics.EventLog": "10.0.5"
+          "Microsoft.Extensions.Options": "10.0.5"
         },
         "runtime": {
           "lib/net10.0/Microsoft.Extensions.Logging.EventLog.dll": {
@@ -389,32 +387,7 @@
           }
         }
       },
-      "System.Diagnostics.EventLog/10.0.5": {
-        "runtime": {
-          "lib/net10.0/System.Diagnostics.EventLog.dll": {
-            "assemblyVersion": "10.0.0.0",
-            "fileVersion": "10.0.526.15411"
-          }
-        },
-        "runtimeTargets": {
-          "runtimes/win/lib/net10.0/System.Diagnostics.EventLog.Messages.dll": {
-            "rid": "win",
-            "assetType": "runtime",
-            "assemblyVersion": "10.0.0.0",
-            "fileVersion": "0.0.0.0"
-          },
-          "runtimes/win/lib/net10.0/System.Diagnostics.EventLog.dll": {
-            "rid": "win",
-            "assetType": "runtime",
-            "assemblyVersion": "10.0.0.0",
-            "fileVersion": "10.0.526.15411"
-          }
-        }
-      },
       "System.ServiceProcess.ServiceController/10.0.5": {
-        "dependencies": {
-          "System.Diagnostics.EventLog": "10.0.5"
-        },
         "runtime": {
           "lib/net10.0/System.ServiceProcess.ServiceController.dll": {
             "assemblyVersion": "10.0.0.5",
@@ -652,13 +625,6 @@
       "sha512": "sha512-/HUHJ0tw/LQvD0DZrz50eQy/3z7PfX7WWEaXnjKTV9/TNdcgFlNTZGo49QhS7PTmhDqMyHRMqAXSBxLh0vso4g==",
       "path": "microsoft.extensions.primitives/10.0.5",
       "hashPath": "microsoft.extensions.primitives.10.0.5.nupkg.sha512"
-    },
-    "System.Diagnostics.EventLog/10.0.5": {
-      "type": "package",
-      "serviceable": true,
-      "sha512": "sha512-wugvy+pBVzjQEnRs9wMTWwoaeNFX3hsaHeVHFDIvJSWXp7wfmNWu3mxAwBIE6pyW+g6+rHa1Of5fTzb0QVqUTA==",
-      "path": "system.diagnostics.eventlog/10.0.5",
-      "hashPath": "system.diagnostics.eventlog.10.0.5.nupkg.sha512"
     },
     "System.ServiceProcess.ServiceController/10.0.5": {
       "type": "package",

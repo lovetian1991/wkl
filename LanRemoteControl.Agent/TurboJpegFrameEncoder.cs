@@ -1,46 +1,49 @@
+using System.Drawing;
+using System.Drawing.Imaging;
+using System.Runtime.InteropServices;
 using LanRemoteControl.Shared;
-using TurboJpegWrapper;
 
 namespace LanRemoteControl.Agent;
 
-/// <summary>基于 TurboJPEG (libjpeg-turbo) 的帧编码器</summary>
+/// <summary>基于 System.Drawing 的 JPEG 帧编码器</summary>
 public sealed class TurboJpegFrameEncoder : IFrameEncoder, IDisposable
 {
     private const int DefaultQuality = 70;
     private const int MinQuality = 30;
     private const int MaxQuality = 100;
 
-    private readonly TJCompressor _compressor;
+    private readonly ImageCodecInfo _jpegCodec;
     private uint _sequenceNumber;
     private int _quality = DefaultQuality;
 
     public TurboJpegFrameEncoder()
     {
-        _compressor = new TJCompressor();
+        _jpegCodec = ImageCodecInfo.GetImageEncoders()
+            .First(c => c.FormatID == ImageFormat.Jpeg.Guid);
     }
 
-    /// <inheritdoc/>
     public int Quality
     {
         get => _quality;
         set => _quality = Math.Clamp(value, MinQuality, MaxQuality);
     }
 
-    /// <inheritdoc/>
     public EncodedFrame Encode(CapturedFrame frame)
     {
-        // Use the IntPtr overload directly — CapturedFrame.DataPointer
-        // points to BGRA pixel data, CapturedFrame.Stride is the row pitch.
-        byte[] jpegData = _compressor.Compress(
-            frame.DataPointer,
+        // Create Bitmap from raw BGRA pointer
+        using var bitmap = new Bitmap(
+            frame.Width, frame.Height,
             frame.Stride,
-            frame.Width,
-            frame.Height,
-            TJPixelFormats.TJPF_BGRA,
-            TJSubsamplingOptions.TJSAMP_420,
-            _quality,
-            TJFlags.NONE);
+            PixelFormat.Format32bppArgb,
+            frame.DataPointer);
 
+        // Encode to JPEG in memory
+        using var ms = new MemoryStream();
+        var encoderParams = new EncoderParameters(1);
+        encoderParams.Param[0] = new EncoderParameter(Encoder.Quality, (long)_quality);
+        bitmap.Save(ms, _jpegCodec, encoderParams);
+
+        byte[] jpegData = ms.ToArray();
         uint seq = _sequenceNumber++;
 
         return new EncodedFrame(
@@ -52,8 +55,5 @@ public sealed class TurboJpegFrameEncoder : IFrameEncoder, IDisposable
             SequenceNumber: seq);
     }
 
-    public void Dispose()
-    {
-        _compressor.Dispose();
-    }
+    public void Dispose() { }
 }

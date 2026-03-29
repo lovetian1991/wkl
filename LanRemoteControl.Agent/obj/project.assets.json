@@ -501,8 +501,7 @@
           "Microsoft.Extensions.DependencyInjection.Abstractions": "10.0.5",
           "Microsoft.Extensions.Logging": "10.0.5",
           "Microsoft.Extensions.Logging.Abstractions": "10.0.5",
-          "Microsoft.Extensions.Options": "10.0.5",
-          "System.Diagnostics.EventLog": "10.0.5"
+          "Microsoft.Extensions.Options": "10.0.5"
         },
         "compile": {
           "lib/net10.0/Microsoft.Extensions.Logging.EventLog.dll": {
@@ -615,37 +614,8 @@
           "Microsoft.NETCore.Platforms": "1.1.0"
         }
       },
-      "System.Diagnostics.EventLog/10.0.5": {
-        "type": "package",
-        "compile": {
-          "lib/net10.0/System.Diagnostics.EventLog.dll": {
-            "related": ".xml"
-          }
-        },
-        "runtime": {
-          "lib/net10.0/System.Diagnostics.EventLog.dll": {
-            "related": ".xml"
-          }
-        },
-        "build": {
-          "buildTransitive/net8.0/_._": {}
-        },
-        "runtimeTargets": {
-          "runtimes/win/lib/net10.0/System.Diagnostics.EventLog.Messages.dll": {
-            "assetType": "runtime",
-            "rid": "win"
-          },
-          "runtimes/win/lib/net10.0/System.Diagnostics.EventLog.dll": {
-            "assetType": "runtime",
-            "rid": "win"
-          }
-        }
-      },
       "System.ServiceProcess.ServiceController/10.0.5": {
         "type": "package",
-        "dependencies": {
-          "System.Diagnostics.EventLog": "10.0.5"
-        },
         "compile": {
           "lib/net10.0/System.ServiceProcess.ServiceController.dll": {
             "related": ".xml"
@@ -678,12 +648,12 @@
           "lib/netstandard1.3/TurboJpegWrapper.dll": {}
         },
         "build": {
-          "build/TurboJpegWrapper.targets": {}
+          "build/_._": {}
         }
       },
       "LanRemoteControl.Shared/1.0.0": {
         "type": "project",
-        "framework": ".NETCoreApp,Version=v7.0",
+        "framework": ".NETCoreApp,Version=v10.0",
         "dependencies": {
           "TurboJpegWrapper": "0.0.0"
         },
@@ -1621,44 +1591,6 @@
         "netstandard.library.nuspec"
       ]
     },
-    "System.Diagnostics.EventLog/10.0.5": {
-      "sha512": "wugvy+pBVzjQEnRs9wMTWwoaeNFX3hsaHeVHFDIvJSWXp7wfmNWu3mxAwBIE6pyW+g6+rHa1Of5fTzb0QVqUTA==",
-      "type": "package",
-      "path": "system.diagnostics.eventlog/10.0.5",
-      "files": [
-        ".nupkg.metadata",
-        ".signature.p7s",
-        "Icon.png",
-        "PACKAGE.md",
-        "THIRD-PARTY-NOTICES.TXT",
-        "buildTransitive/net461/System.Diagnostics.EventLog.targets",
-        "buildTransitive/net462/_._",
-        "buildTransitive/net8.0/_._",
-        "buildTransitive/netcoreapp2.0/System.Diagnostics.EventLog.targets",
-        "lib/net10.0/System.Diagnostics.EventLog.dll",
-        "lib/net10.0/System.Diagnostics.EventLog.xml",
-        "lib/net462/System.Diagnostics.EventLog.dll",
-        "lib/net462/System.Diagnostics.EventLog.xml",
-        "lib/net8.0/System.Diagnostics.EventLog.dll",
-        "lib/net8.0/System.Diagnostics.EventLog.xml",
-        "lib/net9.0/System.Diagnostics.EventLog.dll",
-        "lib/net9.0/System.Diagnostics.EventLog.xml",
-        "lib/netstandard2.0/System.Diagnostics.EventLog.dll",
-        "lib/netstandard2.0/System.Diagnostics.EventLog.xml",
-        "runtimes/win/lib/net10.0/System.Diagnostics.EventLog.Messages.dll",
-        "runtimes/win/lib/net10.0/System.Diagnostics.EventLog.dll",
-        "runtimes/win/lib/net10.0/System.Diagnostics.EventLog.xml",
-        "runtimes/win/lib/net8.0/System.Diagnostics.EventLog.Messages.dll",
-        "runtimes/win/lib/net8.0/System.Diagnostics.EventLog.dll",
-        "runtimes/win/lib/net8.0/System.Diagnostics.EventLog.xml",
-        "runtimes/win/lib/net9.0/System.Diagnostics.EventLog.Messages.dll",
-        "runtimes/win/lib/net9.0/System.Diagnostics.EventLog.dll",
-        "runtimes/win/lib/net9.0/System.Diagnostics.EventLog.xml",
-        "system.diagnostics.eventlog.10.0.5.nupkg.sha512",
-        "system.diagnostics.eventlog.nuspec",
-        "useSharedDesignerContext.txt"
-      ]
-    },
     "System.ServiceProcess.ServiceController/10.0.5": {
       "sha512": "L7pataU51CVJkdfIxpH6wY1buML9zsi9ZVWYaCOLM1AMpd4wQ0StzbOb8OGZAfwCyK/oyKEYcCZrWAi4GgP3lg==",
       "type": "package",
@@ -1719,8 +1651,7 @@
   "projectFileDependencyGroups": {
     "net10.0-windows7.0": [
       "LanRemoteControl.Shared >= 1.0.0",
-      "Microsoft.Extensions.Hosting.WindowsServices >= *",
-      "TurboJpegWrapper >= *"
+      "Microsoft.Extensions.Hosting.WindowsServices >= *"
     ]
   },
   "packageFolders": {
@@ -1780,10 +1711,6 @@
           "Microsoft.Extensions.Hosting.WindowsServices": {
             "target": "Package",
             "version": "[*, )"
-          },
-          "TurboJpegWrapper": {
-            "target": "Package",
-            "version": "[*, )"
           }
         },
         "imports": [
@@ -1800,6 +1727,9 @@
         "frameworkReferences": {
           "Microsoft.NETCore.App": {
             "privateAssets": "all"
+          },
+          "Microsoft.WindowsDesktop.App.WindowsForms": {
+            "privateAssets": "none"
           }
         },
         "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\10.0.201/PortableRuntimeIdentifierGraph.json",
@@ -1808,6 +1738,8 @@
           "Microsoft.VisualBasic": "(,10.4.32767]",
           "Microsoft.Win32.Primitives": "(,4.3.32767]",
           "Microsoft.Win32.Registry": "(,5.0.32767]",
+          "Microsoft.Win32.Registry.AccessControl": "(,10.0.32767]",
+          "Microsoft.Win32.SystemEvents": "(,10.0.32767]",
           "runtime.any.System.Collections": "(,4.3.32767]",
           "runtime.any.System.Diagnostics.Tools": "(,4.3.32767]",
           "runtime.any.System.Diagnostics.Tracing": "(,4.3.32767]",
@@ -1948,6 +1880,7 @@
           "runtime.win8-arm.runtime.native.System.IO.Compression": "(,4.3.32767]",
           "System.AppContext": "(,4.3.32767]",
           "System.Buffers": "(,5.0.32767]",
+          "System.CodeDom": "(,10.0.32767]",
           "System.Collections": "(,4.3.32767]",
           "System.Collections.Concurrent": "(,4.3.32767]",
           "System.Collections.Immutable": "(,10.0.32767]",
@@ -1958,22 +1891,28 @@
           "System.ComponentModel.EventBasedAsync": "(,4.3.32767]",
           "System.ComponentModel.Primitives": "(,4.3.32767]",
           "System.ComponentModel.TypeConverter": "(,4.3.32767]",
+          "System.Configuration.ConfigurationManager": "(,10.0.32767]",
           "System.Console": "(,4.3.32767]",
           "System.Data.Common": "(,4.3.32767]",
           "System.Data.DataSetExtensions": "(,4.4.32767]",
           "System.Diagnostics.Contracts": "(,4.3.32767]",
           "System.Diagnostics.Debug": "(,4.3.32767]",
           "System.Diagnostics.DiagnosticSource": "(,10.0.32767]",
+          "System.Diagnostics.EventLog": "(,10.0.32767]",
           "System.Diagnostics.FileVersionInfo": "(,4.3.32767]",
+          "System.Diagnostics.PerformanceCounter": "(,10.0.32767]",
           "System.Diagnostics.Process": "(,4.3.32767]",
           "System.Diagnostics.StackTrace": "(,4.3.32767]",
           "System.Diagnostics.TextWriterTraceListener": "(,4.3.32767]",
           "System.Diagnostics.Tools": "(,4.3.32767]",
           "System.Diagnostics.TraceSource": "(,4.3.32767]",
           "System.Diagnostics.Tracing": "(,4.3.32767]",
+          "System.DirectoryServices": "(,10.0.32767]",
+          "System.Drawing.Common": "(,10.0.32767]",
           "System.Drawing.Primitives": "(,4.3.32767]",
           "System.Dynamic.Runtime": "(,4.3.32767]",
           "System.Formats.Asn1": "(,10.0.32767]",
+          "System.Formats.Nrbf": "(,10.0.32767]",
           "System.Formats.Tar": "(,10.0.32767]",
           "System.Globalization": "(,4.3.32767]",
           "System.Globalization.Calendars": "(,4.3.32767]",
@@ -1988,6 +1927,7 @@
           "System.IO.FileSystem.Watcher": "(,4.3.32767]",
           "System.IO.IsolatedStorage": "(,4.3.32767]",
           "System.IO.MemoryMappedFiles": "(,4.3.32767]",
+          "System.IO.Packaging": "(,10.0.32767]",
           "System.IO.Pipelines": "(,10.0.32767]",
           "System.IO.Pipes": "(,4.3.32767]",
           "System.IO.Pipes.AccessControl": "(,5.0.32767]",
@@ -2024,6 +1964,7 @@
           "System.Reflection.Metadata": "(,10.0.32767]",
           "System.Reflection.Primitives": "(,4.3.32767]",
           "System.Reflection.TypeExtensions": "(,4.3.32767]",
+          "System.Resources.Extensions": "(,10.0.32767]",
           "System.Resources.Reader": "(,4.3.32767]",
           "System.Resources.ResourceManager": "(,4.3.32767]",
           "System.Resources.Writer": "(,4.3.32767]",
@@ -2047,8 +1988,12 @@
           "System.Security.Cryptography.Csp": "(,4.3.32767]",
           "System.Security.Cryptography.Encoding": "(,4.3.32767]",
           "System.Security.Cryptography.OpenSsl": "(,5.0.32767]",
+          "System.Security.Cryptography.Pkcs": "(,10.0.32767]",
           "System.Security.Cryptography.Primitives": "(,4.3.32767]",
+          "System.Security.Cryptography.ProtectedData": "(,10.0.32767]",
           "System.Security.Cryptography.X509Certificates": "(,4.3.32767]",
+          "System.Security.Cryptography.Xml": "(,10.0.32767]",
+          "System.Security.Permissions": "(,10.0.32767]",
           "System.Security.Principal": "(,4.3.32767]",
           "System.Security.Principal.Windows": "(,5.0.32767]",
           "System.Security.SecureString": "(,4.3.32767]",
@@ -2070,6 +2015,7 @@
           "System.Threading.ThreadPool": "(,4.3.32767]",
           "System.Threading.Timer": "(,4.3.32767]",
           "System.ValueTuple": "(,4.5.32767]",
+          "System.Windows.Extensions": "(,10.0.32767]",
           "System.Xml.ReaderWriter": "(,4.3.32767]",
           "System.Xml.XDocument": "(,4.3.32767]",
           "System.Xml.XmlDocument": "(,4.3.32767]",

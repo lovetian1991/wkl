@@ -33,11 +33,8 @@ F:\kiro\sd\LanRemoteControl.Agent\bin\Debug\net10.0-windows\Microsoft.Extensions
 F:\kiro\sd\LanRemoteControl.Agent\bin\Debug\net10.0-windows\Microsoft.Extensions.Options.dll
 F:\kiro\sd\LanRemoteControl.Agent\bin\Debug\net10.0-windows\Microsoft.Extensions.Options.ConfigurationExtensions.dll
 F:\kiro\sd\LanRemoteControl.Agent\bin\Debug\net10.0-windows\Microsoft.Extensions.Primitives.dll
-F:\kiro\sd\LanRemoteControl.Agent\bin\Debug\net10.0-windows\System.Diagnostics.EventLog.dll
 F:\kiro\sd\LanRemoteControl.Agent\bin\Debug\net10.0-windows\System.ServiceProcess.ServiceController.dll
 F:\kiro\sd\LanRemoteControl.Agent\bin\Debug\net10.0-windows\TurboJpegWrapper.dll
-F:\kiro\sd\LanRemoteControl.Agent\bin\Debug\net10.0-windows\runtimes\win\lib\net10.0\System.Diagnostics.EventLog.Messages.dll
-F:\kiro\sd\LanRemoteControl.Agent\bin\Debug\net10.0-windows\runtimes\win\lib\net10.0\System.Diagnostics.EventLog.dll
 F:\kiro\sd\LanRemoteControl.Agent\bin\Debug\net10.0-windows\runtimes\win\lib\net10.0\System.ServiceProcess.ServiceController.dll
 F:\kiro\sd\LanRemoteControl.Agent\bin\Debug\net10.0-windows\LanRemoteControl.Shared.dll
 F:\kiro\sd\LanRemoteControl.Agent\bin\Debug\net10.0-windows\LanRemoteControl.Shared.pdb

@@ -41,6 +41,7 @@
                     <Button x:Name="ScanButton" Content="扫描设备" DockPanel.Dock="Top"
                             Padding="8,6" Margin="8" Click="ScanButton_Click"/>
                     <ListBox x:Name="DeviceListBox" Margin="4"
+                             SelectionChanged="DeviceListBox_SelectionChanged"
                              MouseDoubleClick="DeviceListBox_MouseDoubleClick">
                         <ListBox.ItemTemplate>
                             <DataTemplate>

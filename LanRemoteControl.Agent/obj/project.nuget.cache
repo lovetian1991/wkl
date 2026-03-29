@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "A0oC04hPtwk=",
+  "dgSpecHash": "WW7HihDZfp0=",
   "success": true,
   "projectFilePath": "F:\\kiro\\sd\\LanRemoteControl.Agent\\LanRemoteControl.Agent.csproj",
   "expectedPackageFiles": [
@@ -34,7 +34,6 @@
     "C:\\Users\\86150\\.nuget\\packages\\microsoft.extensions.primitives\\10.0.5\\microsoft.extensions.primitives.10.0.5.nupkg.sha512",
     "C:\\Users\\86150\\.nuget\\packages\\microsoft.netcore.platforms\\1.1.0\\microsoft.netcore.platforms.1.1.0.nupkg.sha512",
     "C:\\Users\\86150\\.nuget\\packages\\netstandard.library\\1.6.1\\netstandard.library.1.6.1.nupkg.sha512",
-    "C:\\Users\\86150\\.nuget\\packages\\system.diagnostics.eventlog\\10.0.5\\system.diagnostics.eventlog.10.0.5.nupkg.sha512",
     "C:\\Users\\86150\\.nuget\\packages\\system.serviceprocess.servicecontroller\\10.0.5\\system.serviceprocess.servicecontroller.10.0.5.nupkg.sha512",
     "C:\\Users\\86150\\.nuget\\packages\\turbojpegwrapper\\1.5.2\\turbojpegwrapper.1.5.2.nupkg.sha512"
   ],
