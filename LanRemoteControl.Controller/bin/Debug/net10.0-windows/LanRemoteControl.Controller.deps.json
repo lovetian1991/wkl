@@ -1,0 +1,58 @@
+{
+  "runtimeTarget": {
+    "name": ".NETCoreApp,Version=v10.0",
+    "signature": ""
+  },
+  "compilationOptions": {},
+  "targets": {
+    ".NETCoreApp,Version=v10.0": {
+      "LanRemoteControl.Controller/1.0.0": {
+        "dependencies": {
+          "LanRemoteControl.Shared": "1.0.0",
+          "TurboJpegWrapper": "1.5.2"
+        },
+        "runtime": {
+          "LanRemoteControl.Controller.dll": {}
+        }
+      },
+      "TurboJpegWrapper/1.5.2": {
+        "runtime": {
+          "lib/netstandard1.3/TurboJpegWrapper.dll": {
+            "assemblyVersion": "1.5.2.1",
+            "fileVersion": "1.5.2.1"
+          }
+        }
+      },
+      "LanRemoteControl.Shared/1.0.0": {
+        "dependencies": {
+          "TurboJpegWrapper": "1.5.2"
+        },
+        "runtime": {
+          "LanRemoteControl.Shared.dll": {
+            "assemblyVersion": "1.0.0.0",
+            "fileVersion": "1.0.0.0"
+          }
+        }
+      }
+    }
+  },
+  "libraries": {
+    "LanRemoteControl.Controller/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "TurboJpegWrapper/1.5.2": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-JZp0oUACAFeME9vEM43x7o2jrKvVdV2tbhPfmM2LmFYJIRqCGjDHLUA02bq1LFXYYsjk/C26fZgeJup5XkiRzg==",
+      "path": "turbojpegwrapper/1.5.2",
+      "hashPath": "turbojpegwrapper.1.5.2.nupkg.sha512"
+    },
+    "LanRemoteControl.Shared/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    }
+  }
+}

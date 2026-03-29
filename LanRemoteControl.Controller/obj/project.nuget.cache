@@ -1,8 +1,12 @@
 {
   "version": 2,
-  "dgSpecHash": "qqqwDZcN5CvVpcnAzQy6Svsff2j1kq0b9LyucSqeDUoMT4WVZhzUBCodqBccjUbhUS6z6I+QcFnPfj0RUPy1FQ==",
+  "dgSpecHash": "K3uMihgUP0o=",
   "success": true,
   "projectFilePath": "F:\\kiro\\sd\\LanRemoteControl.Controller\\LanRemoteControl.Controller.csproj",
-  "expectedPackageFiles": [],
+  "expectedPackageFiles": [
+    "C:\\Users\\86150\\.nuget\\packages\\microsoft.netcore.platforms\\1.1.0\\microsoft.netcore.platforms.1.1.0.nupkg.sha512",
+    "C:\\Users\\86150\\.nuget\\packages\\netstandard.library\\1.6.1\\netstandard.library.1.6.1.nupkg.sha512",
+    "C:\\Users\\86150\\.nuget\\packages\\turbojpegwrapper\\1.5.2\\turbojpegwrapper.1.5.2.nupkg.sha512"
+  ],
   "logs": []
 }

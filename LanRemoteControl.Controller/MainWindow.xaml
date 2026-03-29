@@ -3,10 +3,76 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:local="clr-namespace:LanRemoteControl.Controller"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="LAN Remote Control" Height="720" Width="1280"
+        WindowStartupLocation="CenterScreen"
+        Closing="Window_Closing">
     <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
 
+        <!-- Top Toolbar -->
+        <ToolBar Grid.Row="0" Padding="4">
+            <TextBlock Text="IP:" VerticalAlignment="Center" Margin="4,0"/>
+            <TextBox x:Name="IpTextBox" Width="160" VerticalAlignment="Center" Margin="4,0"
+                     TextChanged="IpTextBox_TextChanged"/>
+            <TextBlock x:Name="IpErrorText" Text="无效 IP 地址" Foreground="Red"
+                       VerticalAlignment="Center" Margin="4,0" Visibility="Collapsed"/>
+            <Separator/>
+            <Button x:Name="ConnectButton" Content="连接" Padding="12,4" Margin="4,0"
+                    Click="ConnectButton_Click" IsEnabled="False"/>
+            <Button x:Name="DisconnectButton" Content="断开" Padding="12,4" Margin="4,0"
+                    Click="DisconnectButton_Click" IsEnabled="False"/>
+        </ToolBar>
+
+        <!-- Main Content -->
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="220"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <!-- Left Panel: Device List -->
+            <Border Grid.Column="0" BorderBrush="Gray" BorderThickness="0,0,1,0">
+                <DockPanel>
+                    <Button x:Name="ScanButton" Content="扫描设备" DockPanel.Dock="Top"
+                            Padding="8,6" Margin="8" Click="ScanButton_Click"/>
+                    <ListBox x:Name="DeviceListBox" Margin="4"
+                             MouseDoubleClick="DeviceListBox_MouseDoubleClick">
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <StackPanel>
+                                    <TextBlock Text="{Binding HostName}" FontWeight="SemiBold"/>
+                                    <TextBlock Text="{Binding IpAddress}" Foreground="Gray" FontSize="11"/>
+                                </StackPanel>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
+                </DockPanel>
+            </Border>
+
+            <!-- Center: Desktop Display Area -->
+            <Image x:Name="DesktopImage" Grid.Column="1" Stretch="Uniform"
+                   Focusable="True" SnapsToDevicePixels="True"
+                   RenderOptions.BitmapScalingMode="NearestNeighbor"/>
+        </Grid>
+
+        <!-- Bottom Status Bar -->
+        <StatusBar Grid.Row="2">
+            <StatusBarItem>
+                <TextBlock x:Name="ConnectionStatusText" Text="未连接"/>
+            </StatusBarItem>
+            <Separator/>
+            <StatusBarItem>
+                <TextBlock x:Name="FpsText" Text="FPS: --"/>
+            </StatusBarItem>
+            <Separator/>
+            <StatusBarItem>
+                <TextBlock x:Name="LatencyText" Text="延迟: --"/>
+            </StatusBarItem>
+        </StatusBar>
     </Grid>
 </Window>

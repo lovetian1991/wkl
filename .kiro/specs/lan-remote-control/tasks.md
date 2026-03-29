@@ -132,8 +132,8 @@
     - 生成随机主机名和端口配置，验证响应包含非空主机名和有效端口号（1-65535）
     - **验证: 需求 6.1**
 
-- [ ] 6. 实现被控端自适应带宽控制与敏感词过滤
-  - [-] 6.1 实现自适应带宽/压缩质量控制器
+- [x] 6. 实现被控端自适应带宽控制与敏感词过滤
+  - [x] 6.1 实现自适应带宽/压缩质量控制器
     - 监控网络传输延迟和带宽
     - 当带宽低于阈值时，降低 JPEG 编码质量（最低至 30）
     - 当带宽恢复时，恢复默认质量（70）
@@ -144,7 +144,7 @@
     - 生成随机带宽值，验证低带宽时质量降低，带宽恢复时质量恢复
     - **验证: 需求 8.8**
 
-  - [ ] 6.3 实现敏感词过滤工具类
+  - [x] 6.3 实现敏感词过滤工具类
     - 实现进程名称/服务名称敏感词检测函数
     - 实现日志消息敏感短语过滤函数
     - 敏感词列表：remote, control, spy, monitor, capture, keylog, remote control, desktop capture, screen spy, input simulation
@@ -160,8 +160,8 @@
     - 生成随机日志消息，验证敏感词过滤函数正确工作
     - **验证: 需求 9.5**
 
-- [ ] 7. 组装被控端服务宿主（Agent ServiceHost）
-  - [ ] 7.1 实现 Agent 服务宿主
+- [x] 7. 组装被控端服务宿主（Agent ServiceHost）
+  - [x] 7.1 实现 Agent 服务宿主
     - 创建 `AgentService : BackgroundService`，在 `ExecuteAsync` 中编排所有被控端组件
     - 启动流程：初始化 DesktopCapturer → 启动 CommunicationServer → 启动 DiscoveryResponder
     - 会话活跃时：捕获帧 → 编码 → 发送帧数据；接收 InputCommand → 执行输入模拟
@@ -169,13 +169,13 @@
     - 使用 `Microsoft.Extensions.Hosting.WindowsServices` 注册为 Windows 服务
     - _需求: 1.3, 1.4, 1.5, 1.7, 3.1_
 
-  - [ ] 7.2 实现服务安装/卸载命令行
+  - [x] 7.2 实现服务安装/卸载命令行
     - 支持 `--install` 参数：以 "wkl" 为服务名称安装 Windows 服务，启动类型设为自动
     - 支持 `--uninstall` 参数：卸载 "wkl" 服务
     - 配置 SCM 恢复策略：前 3 次失败 5 秒内重启
     - _需求: 1.1, 1.2, 2.1_
 
-  - [ ] 7.3 实现崩溃计数与事件日志记录
+  - [x] 7.3 实现崩溃计数与事件日志记录
     - 连续崩溃超过 3 次时写入 Windows 事件日志（使用敏感词过滤后的消息）
     - 崩溃恢复后恢复到可接受连接的就绪状态
     - _需求: 2.2, 2.3, 9.5_
@@ -191,17 +191,17 @@
     - 验证崩溃恢复后进入可接受连接的就绪状态
     - _需求: 1.1, 1.2, 2.1, 2.3_
 
-- [ ] 8. 检查点 - 确保被控端所有测试通过
+- [x] 8. 检查点 - 确保被控端所有测试通过
   - 确保所有测试通过，如有问题请询问用户。
 
-- [ ] 9. 实现主控端核心组件
-  - [ ] 9.1 实现帧解码器（FrameDecoder）
+- [x] 9. 实现主控端核心组件
+  - [x] 9.1 实现帧解码器（FrameDecoder）
     - 创建 `IFrameDecoder` 接口和基于 TurboJPEG 的实现类
     - 实现 `Decode(EncodedFrame encoded)` 方法，返回 `DecodedFrame`
     - 解码失败时跳过损坏帧，保持上一个有效帧
     - _需求: 8.4, 8.5_
 
-  - [ ] 9.2 实现通信客户端（CommunicationClient）
+  - [x] 9.2 实现通信客户端（CommunicationClient）
     - 创建 `ICommunicationClient` 接口和基于 TCP Socket 的实现类
     - 实现 `ConnectAsync`、`DisconnectAsync`、`SendInputCommandAsync` 方法
     - 实现帧数据接收：按二进制协议解析 FrameHeader + JPEG 数据，触发 `OnFrameReceived` 事件
@@ -209,13 +209,13 @@
     - 实现会话握手：发送 SessionRequest → 接收 SessionResponse
     - _需求: 7.1, 7.2, 7.3, 7.4, 8.1, 8.4, 8.6_
 
-  - [ ] 9.3 实现设备发现客户端（DiscoveryClient）
+  - [x] 9.3 实现设备发现客户端（DiscoveryClient）
     - 创建 `IDiscoveryClient` 接口和实现类
     - 实现 `ScanAsync` 方法：发送 UDP 广播到端口 19620，收集响应
     - 返回 `List<DiscoveredAgent>`（主机名、IP 地址、端口）
     - _需求: 6.2, 6.3_
 
-  - [ ] 9.4 实现输入采集器（InputCollector）
+  - [x] 9.4 实现输入采集器（InputCollector）
     - 创建 `IInputCollector` 接口和实现类
     - 捕获桌面画面显示区域的鼠标事件（移动、点击、滚轮）和键盘事件（按下、释放）
     - 实现坐标映射：将 UI 控件坐标转换为被控端桌面坐标
@@ -233,19 +233,19 @@
     - 生成随机字符串（含有效和无效 IPv4 地址），验证验证器仅接受有效格式
     - **验证: 需求 6.4**
 
-- [ ] 10. 实现主控端 WPF 界面
-  - [ ] 10.1 实现主窗口布局（MainWindow）
+- [x] 10. 实现主控端 WPF 界面
+  - [x] 10.1 实现主窗口布局（MainWindow）
     - 创建 WPF 主窗口，包含：设备列表面板、桌面画面显示区域、工具栏（连接/断开按钮、IP 输入框）、状态栏（连接状态、帧率、延迟）
     - 实现 IP 地址输入验证（IPv4 格式校验），无效时显示错误提示
     - _需求: 5.1, 5.4, 6.4_
 
-  - [ ] 10.2 实现桌面画面渲染
+  - [x] 10.2 实现桌面画面渲染
     - 使用 `WriteableBitmap` 渲染解码后的帧到显示区域
     - 集成 FrameDecoder，接收帧数据后解码并更新 WriteableBitmap
     - 在 UI 线程通过 Dispatcher 更新画面
     - _需求: 5.2, 8.4_
 
-  - [ ] 10.3 实现设备发现 UI 交互
+  - [x] 10.3 实现设备发现 UI 交互
     - 扫描按钮触发 DiscoveryClient.ScanAsync
     - 将发现的 Agent 列表绑定到设备列表面板，显示主机名和 IP 地址
     - 双击设备列表项或点击连接按钮发起连接
@@ -256,7 +256,7 @@
     - 生成随机 DiscoveredAgent 列表，验证 UI 渲染后列表项数量与输入一致，且包含主机名和 IP
     - **验证: 需求 6.3**
 
-  - [ ] 10.5 实现连接/断开与会话管理 UI 逻辑
+  - [x] 10.5 实现连接/断开与会话管理 UI 逻辑
     - 连接按钮：调用 CommunicationClient.ConnectAsync，成功后开始接收帧和发送输入
     - 断开按钮：调用 CommunicationClient.DisconnectAsync，清理资源
     - 连接断开时在状态栏显示提示信息
@@ -264,16 +264,16 @@
     - 窗口关闭时断开会话并释放所有资源
     - _需求: 5.4, 5.5, 7.1, 7.3, 7.4_
 
-  - [ ] 10.6 集成输入采集器到桌面画面显示区域
+  - [x] 10.6 集成输入采集器到桌面画面显示区域
     - 将 InputCollector 附加到桌面画面显示控件
     - InputCollector 捕获的 InputCommand 通过 CommunicationClient 发送到 Agent
     - _需求: 5.3, 4.5_
 
-- [ ] 11. 检查点 - 确保主控端所有测试通过
+- [x] 11. 检查点 - 确保主控端所有测试通过
   - 确保所有测试通过，如有问题请询问用户。
 
 - [ ] 12. 端到端集成与最终验证
-  - [ ] 12.1 集成被控端完整管线
+  - [-] 12.1 集成被控端完整管线
     - 验证 Agent 启动后完整管线工作：DesktopCapturer → FrameEncoder → CommunicationServer 发送帧
     - 验证 CommunicationServer 接收 InputCommand → InputSimulator 执行
     - 验证自适应帧率控制器和带宽控制器协同工作
