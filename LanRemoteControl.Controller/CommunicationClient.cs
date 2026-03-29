@@ -28,6 +28,7 @@ public class CommunicationClient : ICommunicationClient
         ObjectDisposedException.ThrowIf(_disposed, this);
 
         _tcpClient = new TcpClient();
+        _tcpClient.NoDelay = true; // 禁用 Nagle 算法，减少输入指令延迟
         await _tcpClient.ConnectAsync(host, port, ct).ConfigureAwait(false);
         _stream = _tcpClient.GetStream();
 

@@ -104,6 +104,7 @@ public class CommunicationServer : ICommunicationServer
             }
 
             // Handle each client connection in a background task
+            client.NoDelay = true; // 禁用 Nagle 算法，减少输入指令延迟
             _ = HandleClientAsync(client, ct);
         }
     }

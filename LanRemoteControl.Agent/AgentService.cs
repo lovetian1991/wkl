@@ -41,7 +41,7 @@ public class AgentService : BackgroundService
         try
         {
             // Initialize components
-            _capturer = new DxgiDesktopCapturer();
+            _capturer = new GdiDesktopCapturer();
             _encoder = new TurboJpegFrameEncoder();
             _sessionManager = new SessionManager();
             _inputSimulator = new Win32InputSimulator();
@@ -116,12 +116,6 @@ public class AgentService : BackgroundService
 
                 // Encode frame
                 var encoded = _encoder!.Encode(frame.Value);
-
-                // Unmap staging texture after encoding (DxgiDesktopCapturer specific)
-                if (_capturer is DxgiDesktopCapturer dxgiCapturer)
-                {
-                    dxgiCapturer.UnmapStagingTexture();
-                }
 
                 // Send frame to client
                 var sw = Stopwatch.StartNew();

@@ -13,6 +13,7 @@ public sealed class TurboJpegFrameEncoder : IFrameEncoder, IDisposable
     private const int MaxQuality = 100;
 
     private readonly ImageCodecInfo _jpegCodec;
+    private readonly MemoryStream _reuseStream = new(1024 * 256); // 复用，减少 GC
     private uint _sequenceNumber;
     private int _quality = DefaultQuality;
 
@@ -30,30 +31,35 @@ public sealed class TurboJpegFrameEncoder : IFrameEncoder, IDisposable
 
     public EncodedFrame Encode(CapturedFrame frame)
     {
-        // Create Bitmap from raw BGRA pointer
         using var bitmap = new Bitmap(
             frame.Width, frame.Height,
             frame.Stride,
             PixelFormat.Format32bppArgb,
             frame.DataPointer);
 
-        // Encode to JPEG in memory
-        using var ms = new MemoryStream();
+        _reuseStream.SetLength(0);
         var encoderParams = new EncoderParameters(1);
         encoderParams.Param[0] = new EncoderParameter(Encoder.Quality, (long)_quality);
-        bitmap.Save(ms, _jpegCodec, encoderParams);
+        bitmap.Save(_reuseStream, _jpegCodec, encoderParams);
 
-        byte[] jpegData = ms.ToArray();
+        int length = (int)_reuseStream.Length;
+        byte[] jpegData = new byte[length];
+        _reuseStream.Position = 0;
+        _reuseStream.ReadExactly(jpegData, 0, length);
+
         uint seq = _sequenceNumber++;
 
         return new EncodedFrame(
             Data: jpegData,
-            Length: jpegData.Length,
+            Length: length,
             Width: frame.Width,
             Height: frame.Height,
             TimestampTicks: frame.TimestampTicks,
             SequenceNumber: seq);
     }
 
-    public void Dispose() { }
+    public void Dispose()
+    {
+        _reuseStream.Dispose();
+    }
 }

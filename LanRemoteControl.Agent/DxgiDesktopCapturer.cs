@@ -86,13 +86,10 @@ public sealed class DxgiDesktopCapturer : IDesktopCapturer
                 if (hr < 0)
                     return null;
 
-                var width = (int)(_outputWidth * _scaleFactor);
-                var height = (int)(_outputHeight * _scaleFactor);
-
                 return new CapturedFrame(
                     mappedResource.pData,
-                    width,
-                    height,
+                    _outputWidth,
+                    _outputHeight,
                     (int)mappedResource.RowPitch,
                     DateTime.UtcNow.Ticks);
             }
@@ -270,10 +267,12 @@ public sealed class DxgiDesktopCapturer : IDesktopCapturer
         if (_stagingTexture != nint.Zero)
             return;
 
+        // Staging texture must match the output duplication size exactly
+        // (CopyResource requires identical dimensions)
         var desc = new NativeMethods.D3D11_TEXTURE2D_DESC
         {
-            Width = (uint)(_outputWidth * _scaleFactor),
-            Height = (uint)(_outputHeight * _scaleFactor),
+            Width = (uint)_outputWidth,
+            Height = (uint)_outputHeight,
             MipLevels = 1,
             ArraySize = 1,
             Format = NativeMethods.DXGI_FORMAT_B8G8R8A8_UNORM,

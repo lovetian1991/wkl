@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("LanRemoteControl.Agent")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+93ee1e018d1185b3b8338ad3258ae95705e654f8")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+d335b3e314398e32d09574e6e152559d23f95dde")]
 [assembly: System.Reflection.AssemblyProductAttribute("LanRemoteControl.Agent")]
 [assembly: System.Reflection.AssemblyTitleAttribute("LanRemoteControl.Agent")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
